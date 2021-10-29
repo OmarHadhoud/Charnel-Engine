@@ -23,3 +23,9 @@ CMakeSettings.json
 
 # Screenshots
 screenshots/
+
+#imgcmp
+errors/
+imgcmp.exe
+compare.bash
+compare.ps1
