@@ -15,11 +15,12 @@ namespace glm {
 class FullscreenTriangleState: public our::State {
     
     our::ShaderProgram program;
-    //TODO: Add a variable in which we will store the name (ID) for a vertex array
+    // vertex array object name (ID)
+    GLuint vao;
 
     // onInitialize() function is called once before the state starts
     void onInitialize() override {
-        
+
         // Here we get the json of the scene configuration
         const auto& config = getApp()->getConfig()["scene"];
 
@@ -53,7 +54,8 @@ class FullscreenTriangleState: public our::State {
             }
         }
 
-        //TODO: Create a vertex Array
+        // create one vertex Array
+        glGenVertexArrays(1, &this->vao);
 
         // We set the clear color to be black
         glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -64,12 +66,16 @@ class FullscreenTriangleState: public our::State {
         //At the start of frame we want to clear the screen. Otherwise we would still see the results from the previous frame.
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //TODO: Draw a triangle using the vertex array and the program
-
+        // draw a triangle using the vertex array and the program
+        // first we have to bind the vertex array to be able to draw
+        // we don't need to send data as we are not using vertex buffers yet (we create the vertices in fullscreen.vert)
+        glBindVertexArray(this->vao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
     // onInitialize() function is called once after the state ends
     void onDestroy() override {
-        //TODO: Delete the vertex Array
+        // delete the vertex Array
+        glDeleteVertexArrays(1, &this->vao);
     }
 };
