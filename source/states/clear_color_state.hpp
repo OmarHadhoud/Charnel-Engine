@@ -5,11 +5,13 @@
 class ClearColorState: public our::State {
     // onInitialize() function is called once before the state starts
     void onInitialize() override {
-        //TODO: Read the color from the configuration file and use it to set the clear color for the window
-        //HINT: you can the configuration for the whole application using "getApp()->getConfig()"
-        //To see how the clear color is written in the json files, see "config/blue-screen.json"
-        //To know how read data from a nlohmann::json object, 
-        //look at the following documentation: https://json.nlohmann.me/features/element_access/
+        // Read the color from the configuration file and use it to set the clear color for the window
+        auto config = getApp()->getConfig();
+        auto r = config["scene"]["clear-color"]["r"].get<float>();
+        auto g = config["scene"]["clear-color"]["g"].get<float>();
+        auto b = config["scene"]["clear-color"]["b"].get<float>();
+        auto a = config["scene"]["clear-color"]["a"].get<float>();
+        glClearColor(r, g, b, a);
     }
 
     // onDraw(deltaTime) function is called every frame 
