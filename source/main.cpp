@@ -9,7 +9,7 @@
 #include "states/fullscreen_triangle_state.hpp"
 
 int main(int argc, char** argv) {
-    
+
     flags::args args(argc, argv); // Parse the command line arguments
     // config_path is the path to the json file containing the application configuration
     // Default: "config/app.json"
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 
     // Create the application
     our::Application app(app_config);
-    
+
     // Register all the states of the project in the application
     app.registerState<ClearColorState>("clear-color");
     app.registerState<FullscreenTriangleState>("fullscreen-triangle");
