@@ -18,6 +18,9 @@ namespace our {
         // delete assignment operator and copy constructor
         // we need to delete them as the destructor of the shader program deletes the shader program in opengl, so we can't have
         // 2 shader programs having the same program in opengl, as then it will be deleted twice
+        // so if we need two shaders that are the same, we have to create it twice, we can't use copy operator or assignment operator
+        // as they will act as if they were pointers to one shader on the gpu
+        // while they are actually one shader, so once one of them die, the other dies even if it still exists on cpu side
         ShaderProgram(const ShaderProgram&) = delete;
         ShaderProgram& operator=(const ShaderProgram&) = delete;
 
