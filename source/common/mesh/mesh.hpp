@@ -31,18 +31,71 @@ namespace our {
             //TODO: Write this function
             // remember to store the number of elements in "elementCount" since you will need it for drawing
             // For the attribute locations, use the constants defined above: ATTRIB_LOC_POSITION, ATTRIB_LOC_COLOR, etc
+
+            // Generate vertex array object and bind it
+            // We use vertex array object to define how the data is interpreted (attributes)
+            glGenVertexArrays(1, &VAO);
+            glBindVertexArray(VAO);
+
+            // Generate vertex buffer, bind it and copy the vertex data to the VRAM
+            glGenBuffers(1, &VBO);
+            glBindBuffer(GL_ARRAY_BUFFER, VBO);
+            // Use static draw as we won't change the data of the buffer
+            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+
+            // Generate element buffer, bind it and copy the element data to the VRAM
+            glGenBuffers(1, &EBO);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+            // Use static draw as we won't change the data of the buffer
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(unsigned int), &elements[0], GL_STATIC_DRAW);
+
+            // Enable the vertex attributes array, so that they can be accessed during rendering
+            // when we call vertex array commands (DrawArrays, DrawElements, etc)
+            glEnableVertexAttribArray(ATTRIB_LOC_POSITION);
+            glEnableVertexAttribArray(ATTRIB_LOC_COLOR);
+            glEnableVertexAttribArray(ATTRIB_LOC_TEXCOORD);
+            glEnableVertexAttribArray(ATTRIB_LOC_NORMAL);
+
+            // Specify the layout of the vertex data
+            // params: attribute index, number of components, data type, normalized, stride, offset
+            glVertexAttribPointer(ATTRIB_LOC_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+            glVertexAttribPointer(ATTRIB_LOC_COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+            glVertexAttribPointer(ATTRIB_LOC_TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tex_coord));
+            glVertexAttribPointer(ATTRIB_LOC_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+
+            // Unbind the vertex array object (just to make sure the code following this func doesn't overwrite the vertex array object)
+            glBindVertexArray(0);
+            // Unbind the buffers (just to make sure we don't accidentally overwrite the buffers in code following this function)
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+            // Update the element count to be used when drawing
+            elementCount = elements.size();
         }
 
         // this function should render the mesh
         void draw() 
         {
             //TODO: Write this function
+
+            // Bind the vertex array object that will be used for drawing the mesh
+            glBindVertexArray(VAO);
+            // Draw the mesh used indexed drawing
+            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+            // Unbind the vertex array object
+            glBindVertexArray(0);
         }
 
         // this function should delete the vertex & element buffers and the vertex array object
         ~Mesh()
         {
             //TODO: Write this function
+            // Delete the vertex buffer as we're done with the mesh and no longer need the data
+            glDeleteBuffers(1, &VBO);
+            // Delete the element buffer as we're done with the mesh and no longer need the data
+            glDeleteBuffers(1, &EBO);
+            // Delete the vertex array object as we're done with the mesh and no longer need it
+            glDeleteVertexArrays(1, &VAO);
         }
 
         Mesh(Mesh const &) = delete;
