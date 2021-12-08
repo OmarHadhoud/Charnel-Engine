@@ -29,3 +29,7 @@ errors/
 imgcmp.exe
 compare.bash
 compare.ps1
+
+# Submission files
+*.zip
+*.rar
