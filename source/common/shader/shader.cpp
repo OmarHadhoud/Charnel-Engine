@@ -5,17 +5,6 @@
 #include <fstream>
 #include <string>
 
-void our::ShaderProgram::create() {
-    //Create Shader Program
-    program = glCreateProgram();
-}
-
-void our::ShaderProgram::destroy() {
-    //Delete Shader Program
-    if(program != 0) glDeleteProgram(program);
-    program = 0;
-}
-
 //Forward definition for error checking functions
 std::string checkForShaderCompilationErrors(GLuint shader);
 std::string checkForLinkingErrors(GLuint program);
@@ -33,25 +22,20 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
 
     GLuint shaderID = glCreateShader(type);
 
-    // send the source code to the shader
-    // we pass count as 1 as we have only 1 string sent to compile,
-    // we also send the address of the char * as it takes a **char as it can be an array to strings,
-    // and we send the array of lengths to be nullptr as it can figure it out on its own
+    // send the source code to the shader and compile it
     glShaderSource(shaderID, 1, &sourceCStr, nullptr);
     glCompileShader(shaderID);
-
-    // Here we check for compilation errors
-    if(std::string error = checkForShaderCompilationErrors(shaderID); error.size() != 0) {
+    
+    if(std::string error = checkForShaderCompilationErrors(shaderID); error.size() != 0){
         std::cerr << "ERROR IN " << filename << std::endl;
         std::cerr << error << std::endl;
         glDeleteShader(shaderID);
         return false;
     }
 
-
+    
     // attach the shader to the program then delete the shader
-    // note that this won't delete it until it is no longer attached to any program (source: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glDeleteShader.xhtml)
-    glAttachShader(this->program, shaderID);
+    glAttachShader(program, shaderID);
     glDeleteShader(shaderID);
 
     //We return true since the compilation succeeded
@@ -61,16 +45,14 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
 
 
 bool our::ShaderProgram::link() const {
-    // call opengl to link the program
-    glLinkProgram(this->program);
+    // call opengl to link the program identified by this->program 
+    glLinkProgram(program);
 
-    // Here we check for linking errors
-    if(auto error = checkForLinkingErrors(program); error.size() != 0) {
+    if(auto error = checkForLinkingErrors(program); error.size() != 0){
         std::cerr << "LINKING ERROR" << std::endl;
         std::cerr << error << std::endl;
         return false;
     }
-
     return true;
 }
 
