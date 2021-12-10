@@ -14,33 +14,44 @@ namespace our {
         // This constructor creates an OpenGL sampler and saves its object name in the member variable "name" 
         Sampler() {
             //TODO: Complete this function
+            // Generate thhe sampler
+            glGenSamplers(1, &name);
         };
 
         // This deconstructor deletes the underlying OpenGL sampler
         ~Sampler() { 
             //TODO: Complete this function
+            // Delete the sampler
+            glDeleteSamplers(1, &name);
          }
 
         // This method binds this sampler to the given texture unit
         void bind(GLuint textureUnit) const {
             //TODO: Complete this function
+            // Here we bind the texture unit to this sampler, this means any texture that has this texture unit will use the state of this sampler
+            // not the texture's one
+            glBindSampler(textureUnit, name);
         }
 
         // This static method ensures that no sampler is bound to the given texture unit
         static void unbind(GLuint textureUnit){
             //TODO: Complete this function
+            // We no longer use the sampler for this texture unit as we unbind it
+            glBindSampler(textureUnit, 0);
         }
 
         // This function sets a sampler paramter where the value is of type "GLint"
         // This can be used to set the filtering and wrapping parameters
         void set(GLenum parameter, GLint value) const {
             //TODO: Complete this function
+            glSamplerParameteri(name, parameter, value);
         }
 
         // This function sets a sampler paramter where the value is of type "GLfloat"
         // This can be used to set the "GL_TEXTURE_MAX_ANISOTROPY_EXT" parameter
         void set(GLenum parameter, GLfloat value) const {
             //TODO: Complete this function
+            glSamplerParameterf(name, parameter, value);
         }
 
         // This function sets a sampler paramter where the value is of type "GLfloat[4]"
