@@ -66,13 +66,13 @@ namespace our
 
             //TODO: Modify the following line such that "cameraForward" contains a vector pointing the camera forward direction
             // HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
-            glm::vec3 cameraForward = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, -1, 1);
+            glm::vec3 cameraForward = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, -1, 0);
             std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
                 //TODO: Finish this function
                 // HINT: the following return should return true "first" should be drawn before "second".
                 // NOTE: THIS SHOULD BE EXPLAINED BETTER
                 // create a vector from first object to second object
-                auto first_to_second = first.center - second.center;
+                auto first_to_second = second.center - first.center;
                 // get the dot product of the vector and the camera forward vector which will indicate if the first_to_second is in same direction
                 // of the forward, if it isn't, then the first object is further than the second and should be drawn first
                 auto dot_prod = glm::dot(first_to_second, cameraForward);
