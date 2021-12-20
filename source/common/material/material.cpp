@@ -65,4 +65,81 @@ namespace our {
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
     }
 
+    // This function should call the setup of its parent and
+    // set the "alphaThreshold" uniform to the value in the member variable alphaThreshold
+    // set the texture maps and shininess
+    // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
+    void LitMaterial::setup() const {
+        Material::setup();
+        // Set alpathreshold uniform
+        shader->set("material.alphaThreshold", alphaThreshold);
+        // Set shininess uniform
+        shader->set("material.shininess", shininess);
+
+        // only albedo is neccessary
+        // make texture unit 0 active and bind the texture to it
+        glActiveTexture(GL_TEXTURE0);
+        albedo->bind();
+        // bind the sampler to texture unit 0
+        sampler->bind(0);
+
+        if (specular)
+        {
+            // make texture unit 1 active and bind the texture to it
+            glActiveTexture(GL_TEXTURE1);
+            specular->bind();
+            // bind the sampler to texture unit 1
+            sampler->bind(1);
+        }
+
+        if(roughness)
+        {
+            // make texture unit 2 active and bind the texture to it
+            glActiveTexture(GL_TEXTURE2);
+            roughness->bind();
+            // bind the sampler to texture unit 2
+            sampler->bind(2);
+        }
+
+        if (ambient_occlusion)
+        {
+            // make texture unit 3 active and bind the texture to it
+            glActiveTexture(GL_TEXTURE3);
+            ambient_occlusion->bind();
+            // bind the sampler to texture unit 3
+            sampler->bind(3);
+        }
+
+        if (emission)
+        {
+            // make texture unit 4 active and bind the texture to it
+            glActiveTexture(GL_TEXTURE3);
+            emission->bind();
+            // bind the sampler to texture unit 4
+            sampler->bind(4);
+        }
+
+        // send the unit number as a uniform for the shader
+        shader->set("material.albedo", 0);
+        shader->set("material.specular", 1);
+        shader->set("material.roughness", 2);
+        shader->set("material.ambient_occlusion", 2);
+        shader->set("material.emission", 2);
+
+    }
+
+    // This function read the material data from a json object
+    void LitMaterial::deserialize(const nlohmann::json& data){
+        Material::deserialize(data);
+        if(!data.is_object()) return;
+        alphaThreshold = data.value("alphaThreshold", 0.0f);
+        shininess = data.value("shininess", 32);
+        albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
+        specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
+        roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
+        ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
+        emission = AssetLoader<Texture2D>::get(data.value("emission", ""));
+        sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
+    }
+
 }

@@ -3,6 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/mesh-renderer.hpp"
+#include "../components/light.hpp"
 
 #include <glad/gl.h>
 #include <vector>
@@ -31,13 +32,41 @@ namespace our
         std::vector<RenderCommand> opaqueCommands;
         std::vector<RenderCommand> transparentCommands;
     public:
+        // This function should be called every frame before rendering to setup the lights in the scene
+        void setupLights(World* world, ShaderProgram* shaderProgram) {
+            shaderProgram->use();
+            int lightCount = 0;
+            for (auto entity : world->getEntities()) {
+                // Get the light component
+                auto light = entity->getComponent<LightComponent>();
+                if (light == nullptr)
+                    continue;
+                auto light_dir = glm::vec3((entity->getLocalToWorldMatrix() * glm::vec4(0, 0, -1, 0)));
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].type", int(light->lightType));
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].position", entity->localTransform.position);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].direction", light_dir);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].diffuse", light->diffuse);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].specular", light->specular);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].ambient", light->ambient);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].attenuationConstant", light->attenuationConstant);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].attenuationLinear", light->attenuationLinear);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].attenuationQuadratic", light->attenuationQuadratic);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].innerCutoff", light->innerCutoff);
+                shaderProgram->set("lights[" + std::to_string(lightCount) + "].outerCutoff", light->outerCutoff);
+                lightCount++;
+            }
+            shaderProgram->set("lightCount", lightCount);
+        }
+
         // This function should be called every frame to draw the given world
         // Both viewportStart and viewportSize are using to define the area on the screen where we will draw the scene
         // viewportStart is the lower left corner of the viewport (in pixels)
         // viewportSize is the width & height of the viewport (in pixels). It is also used to compute the aspect ratio
         void render(World* world, glm::ivec2 viewportStart, glm::ivec2 viewportSize){
             // First of all, we search for a camera and for all the mesh renderers
+            // we also search for the lit shader if it is used in a draw command, so that we use it to setup lights later
             CameraComponent* camera = nullptr;
+            ShaderProgram* litShader = nullptr;
             opaqueCommands.clear();
             transparentCommands.clear();
             for(auto entity : world->getEntities()){
@@ -51,6 +80,9 @@ namespace our
                     command.center = glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1));
                     command.mesh = meshRenderer->mesh;
                     command.material = meshRenderer->material;
+                    // If the material is lit, we store the lit shader
+                    if (dynamic_cast<const LitMaterial*>(command.material))
+                        litShader = meshRenderer->material->shader;
                     // if it is transparent, we add it to the transparent commands list
                     if(command.material->transparent){
                         transparentCommands.push_back(command);
@@ -60,6 +92,10 @@ namespace our
                     }
                 }
             }
+
+            // if we use lights, then setup it for once before drawing
+            if(litShader)
+                setupLights(world, litShader);
 
             // If there is no camera, we return (we cannot render without a camera)
             if(camera == nullptr) return;
@@ -96,6 +132,10 @@ namespace our
             {
                 command.material->setup();
                 command.material->shader->set("transform", VP * command.localToWorld);
+                command.material->shader->set("model", command.localToWorld);
+                command.material->shader->set("model_inv_transpose", glm::transpose(glm::inverse(command.localToWorld)));
+                command.material->shader->set("view_proj", VP);
+                command.material->shader->set("camera_pos", glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1)));
                 command.mesh->draw();
             }
 
@@ -103,6 +143,9 @@ namespace our
             {
                 command.material->setup();
                 command.material->shader->set("transform", VP * command.localToWorld);
+                command.material->shader->set("model", command.localToWorld);
+                command.material->shader->set("model_inv_transpose", glm::transpose(glm::inverse(command.localToWorld)));
+                command.material->shader->set("view_proj", VP);
                 command.mesh->draw();
             }
         };
