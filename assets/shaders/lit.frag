@@ -47,7 +47,7 @@ out vec4 frag_color;
 //Light computation functions
 vec3 ComputeLight();
 vec3 ComputeDirectionalLight();
-// vec3 ComputePointLights();
+vec3 ComputePointLights();
 // vec3 ComputeSpotLights();
 
 void main(){
@@ -60,7 +60,7 @@ void main(){
 vec3 ComputeLight()
 {
 	vec3 color = ComputeDirectionalLight();
-	// color += ComputePointLights();
+	color += ComputePointLights();
 	// color += ComputeSpotLights();
 	return color;
 }
@@ -68,9 +68,6 @@ vec3 ComputeLight()
 vec3 ComputeDirectionalLight()
 {
 	vec4 ret = vec4(0.0f);
-	vec3 ambient = vec3(0.0f);
-	vec3 diffuse = vec3(0.0f);
-	vec3 specular = vec3(0.0f);
 	//Loop on all lights in the scene
 	for(int i = 0; i < lightCount; i++)
 	{
@@ -91,4 +88,36 @@ vec3 ComputeDirectionalLight()
 	}
 
 	return ret.rgb * fs_in.color.rgb;
+}
+
+vec3 ComputePointLights()
+{
+    vec4 ret = vec4(0.0f);
+	//Loop on all point lights in the scene
+	for(int i = 0; i < lightCount; i++)
+	{
+        if (lights[i].type != TYPE_POINT)
+            continue;
+
+		vec3 normal = normalize(fs_in.normal);
+        vec3 view = normalize(fs_in.view);
+
+        vec3 light_direction = normalize(fs_in.world - lights[i].position);
+        float d = length(light_direction);
+        light_direction /= d;
+
+        float attenuation = 1.0 / (lights[i].attenuationConstant + lights[i].attenuationLinear * d + lights[i].attenuationQuadratic * d * d);
+
+        vec3 reflected = reflect(light_direction, normal);
+
+        float lambert = max(dot(normal, -light_direction), 0.0);
+        float phong = pow(max(dot(reflected, view), 0.0), material.shininess);
+
+        vec4 albedo = lambert * texture(material.albedo, fs_in.tex_coord) * vec4(lights[i].diffuse, 1);
+        vec4 specular = phong * texture(material.specular, fs_in.tex_coord)  * vec4(lights[i].specular, 1);
+        vec4 ambient = texture(material.albedo, fs_in.tex_coord)  * vec4(lights[i].ambient, 1);
+        ret += ambient + ((albedo + specular) * attenuation);
+	}
+
+	return ret.xyz * fs_in.color.rgb;
 }

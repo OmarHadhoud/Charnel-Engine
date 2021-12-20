@@ -6,11 +6,11 @@ namespace our {
     // Reads camera parameters from the given json object
     void LightComponent::deserialize(const nlohmann::json& data){
         if(!data.is_object()) return;
-        std::string lightTypeStr = data.value("lightType", "direct");
-        if(lightTypeStr == "direct")
+        std::string lightTypeStr = data.value("lightType", "Direct");
+        if(lightTypeStr == "Direct")
         {
             lightType = LightType::DIRECT;
-        } else if(lightTypeStr == "point")
+        } else if(lightTypeStr == "Point")
         {
             lightType = LightType::POINT;
         }

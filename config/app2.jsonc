@@ -84,8 +84,8 @@
                     "sampler": "pixelated"
                 },
                 "grass":{
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -95,7 +95,7 @@
                         }
                     },
                     "tint": [1, 1, 1, 1],
-                    "texture": "grass",
+                    "albedo": "grass",
                     "sampler": "default"
                 },
                 "monkey":{
@@ -281,28 +281,6 @@
                 ]
             },
             {
-                "rotation": [270, 0, 0],
-                "components": [
-                    {
-                        "type": "Light",
-                        "diffuse": [0.5, 0.1, 0.1],
-                        "specular": [1, 0, 0],
-                        "ambient": [0.2, 0.1, 0.1]
-                    }
-                ]
-            },
-            {
-                "rotation": [90, 0, 0],
-                "components": [
-                    {
-                        "type": "Light",
-                        "diffuse": [0.1, 0.1, 0.5],
-                        "specular": [0, 0, 1],
-                        "ambient": [0.1, 0.1, 0.2]
-                    }
-                ]
-            },
-            {
                 "rotation": [90, 0, 0],
                 "position": [6, 2, 0],
                 "scale": [3,3,3],
@@ -311,6 +289,51 @@
                         "type": "Mesh Renderer",
                         "mesh": "grass",
                         "material": "grass_transp"
+                    }
+                ]
+            },
+            // {
+            //     "rotation": [270, 0, 0],
+            //     "components": [
+            //         {
+            //             "type": "Light",
+            //             "lightType": "Directional",
+            //             "diffuse": [0.5, 0.1, 0.1],
+            //             "specular": [1, 0, 0],
+            //             "ambient": [0.2, 0.1, 0.1]
+            //         }
+            //     ]
+            // },
+            // {
+            //     "rotation": [90, 0, 0],
+            //     "components": [
+            //         {
+            //             "type": "Light",
+            //             "lightType": "Directional",
+            //             "diffuse": [0.1, 0.1, 0.5],
+            //             "specular": [0, 0, 1],
+            //             "ambient": [0.1, 0.1, 0.2]
+            //         }
+            //     ]
+            // },
+            {
+                "position": [4, 3, 0],
+                "scale": [0.5, 0.5, 0.5],
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": "Point",
+                        "diffuse": [0.5, 0.5, 0.5],
+                        "specular": [1, 1, 1],
+                        "ambient": [0.2, 0.2, 0.2],
+                        "constant": 1,
+                        "linear": 0.0045,
+                        "quadratic": 0.0075
+                    },
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "monkey",
+                        "material": "monkey"
                     }
                 ]
             }
