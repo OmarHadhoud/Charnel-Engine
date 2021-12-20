@@ -70,7 +70,6 @@ namespace our
             std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
                 //TODO: Finish this function
                 // HINT: the following return should return true "first" should be drawn before "second".
-                // NOTE: THIS SHOULD BE EXPLAINED BETTER
                 // create a vector from first object to second object
                 auto first_to_second = second.center - first.center;
                 // get the dot product of the vector and the camera forward vector which will indicate if the first_to_second is in same direction
