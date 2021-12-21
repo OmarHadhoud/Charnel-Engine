@@ -26,7 +26,7 @@ void main(){
     // the position of the vertex in world space
     vs_out.world = (model * vec4(position, 1.0)).xyz;
     // the view vector of the vertex in world space
-    vs_out.view = normalize(camera_pos - vs_out.world);
+    vs_out.view = camera_pos - vs_out.world;
     // the normal of the vertex in world space
     vs_out.normal = normalize((model_inv_transpose * vec4(normal, 0.0)).xyz);
 

@@ -146,6 +146,7 @@ namespace our
                 command.material->shader->set("model", command.localToWorld);
                 command.material->shader->set("model_inv_transpose", glm::transpose(glm::inverse(command.localToWorld)));
                 command.material->shader->set("view_proj", VP);
+                command.material->shader->set("camera_pos", glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1)));
                 command.mesh->draw();
             }
         };

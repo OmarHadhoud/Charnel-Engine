@@ -24,7 +24,7 @@ namespace our {
         attenuationConstant = data.value("attenuationConstant", 1.0f);
         attenuationLinear = data.value("attenuationLinear", 0.0f);
         attenuationQuadratic = data.value("attenuationQuadratic", 0.0f);
-        innerCutoff = data.value("innerCutoff", 0.0f);
-        outerCutoff = data.value("outerCutoff", 0.0f);
+        innerCutoff = glm::radians(data.value("innerCutoff", 0.0f));
+        outerCutoff = glm::radians(data.value("outerCutoff", 0.0f));
     }
 }
