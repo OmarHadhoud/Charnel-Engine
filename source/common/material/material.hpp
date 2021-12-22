@@ -57,14 +57,18 @@ namespace our {
     class LitMaterial : public Material {
     public:
         Texture2D* albedo;
+        glm::vec3 albedo_tint;
         Texture2D* specular;
+        glm::vec3 specular_tint;
         Texture2D* roughness;
+        glm::vec2 roughness_range;
         Texture2D* ambient_occlusion;
         Texture2D* emission;
+        glm::vec3 emission_tint;
         Sampler* sampler;
 
-        float shininess;
         float alphaThreshold;
+        float shininess;
 
         void setup() const override;
         void deserialize(const nlohmann::json& data) override;

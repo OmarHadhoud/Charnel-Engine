@@ -32,10 +32,14 @@ uniform int lightCount;
 
 struct Material {
     sampler2D albedo;
+    vec3 albedo_tint;
     sampler2D specular;
+    vec3 specular_tint;
     sampler2D roughness;
+    vec2 roughness_range;
     sampler2D ambient_occlusion;
     sampler2D emission;
+    vec3 emission_tint;
     float shininess;
     float alphaThreshold;
 };
@@ -55,6 +59,7 @@ void main(){
     if (frag_color.a < material.alphaThreshold) {
         discard;
     }
+    frag_color += vec4(texture(material.emission, fs_in.tex_coord).rgb * material.emission_tint, 0.0f);
 }
 
 vec3 ComputeLight()
@@ -67,7 +72,7 @@ vec3 ComputeLight()
 
 vec3 ComputeDirectionalLight()
 {
-	vec4 ret = vec4(0.0f);
+	vec3 ret = vec3(0.0f);
 	//Loop on all lights in the scene
 	for(int i = 0; i < lightCount; i++)
 	{
@@ -79,11 +84,17 @@ vec3 ComputeDirectionalLight()
         vec3 reflected = reflect(lights[i].direction, normal);
 
         float lambert = max(dot(normal, -lights[i].direction), 0.0);
-        float phong = pow(max(dot(reflected, view), 0.0), material.shininess);
 
-        vec4 albedo = lambert * texture(material.albedo, fs_in.tex_coord) * vec4(lights[i].diffuse, 1);
-        vec4 specular = phong * texture(material.specular, fs_in.tex_coord)  * vec4(lights[i].specular, 1);
-        vec4 ambient = texture(material.albedo, fs_in.tex_coord)  * vec4(lights[i].ambient, 1);
+        float roughness = mix(material.roughness_range.x, material.roughness_range.y, texture(material.roughness, fs_in.tex_coord).r);
+        float shininess = 2.0f/pow(clamp(roughness, 0.001f, 0.999f), 4.0f) - 2.0f;
+        if (material.shininess > 0.1)
+            shininess = material.shininess;
+        float phong = pow(max(dot(reflected, view), 0.0), shininess);
+
+        vec3 albedo = lambert * texture(material.albedo, fs_in.tex_coord).rgb * material.albedo_tint * lights[i].diffuse;
+        vec3 specular = phong * texture(material.specular, fs_in.tex_coord).rgb * material.specular_tint  * lights[i].specular;
+        vec3 ambient = texture(material.albedo, fs_in.tex_coord).rgb  * lights[i].ambient * material.albedo_tint;
+        ambient *= texture(material.ambient_occlusion, fs_in.tex_coord).r;
         ret += (albedo + ambient + specular);
 	}
 
@@ -92,7 +103,7 @@ vec3 ComputeDirectionalLight()
 
 vec3 ComputePointLights()
 {
-    vec4 ret = vec4(0.0f);
+    vec3 ret = vec3(0.0f);
 	//Loop on all point lights in the scene
 	for(int i = 0; i < lightCount; i++)
 	{
@@ -111,11 +122,17 @@ vec3 ComputePointLights()
         vec3 reflected = reflect(light_direction, normal);
 
         float lambert = max(dot(normal, -light_direction), 0.0);
-        float phong = pow(max(dot(reflected, view), 0.0), material.shininess);
 
-        vec4 albedo = lambert * texture(material.albedo, fs_in.tex_coord) * vec4(lights[i].diffuse, 1);
-        vec4 specular = phong * texture(material.specular, fs_in.tex_coord)  * vec4(lights[i].specular, 1);
-        vec4 ambient = texture(material.albedo, fs_in.tex_coord)  * vec4(lights[i].ambient, 1);
+        float roughness = mix(material.roughness_range.x, material.roughness_range.y, texture(material.roughness, fs_in.tex_coord).r);
+        float shininess = 2.0f/pow(clamp(roughness, 0.001f, 0.999f), 4.0f) - 2.0f;
+        if (material.shininess > 0.1)
+            shininess = material.shininess;
+        float phong = pow(max(dot(reflected, view), 0.0), shininess);
+
+        vec3 albedo = lambert * texture(material.albedo, fs_in.tex_coord).rgb * lights[i].diffuse;
+        vec3 specular = phong * texture(material.specular, fs_in.tex_coord).rgb  * lights[i].specular;
+        vec3 ambient = texture(material.albedo, fs_in.tex_coord).rgb  * lights[i].ambient * material.albedo_tint;
+        ambient *= texture(material.ambient_occlusion, fs_in.tex_coord).r;
         ret += ambient + ((albedo + specular) * attenuation);
 	}
 
@@ -124,7 +141,7 @@ vec3 ComputePointLights()
 
 vec3 ComputeSpotLights()
 {
-    vec4 ret = vec4(0.0f);
+    vec3 ret = vec3(0.0f);
 	//Loop on all point lights in the scene
 	for(int i = 0; i < lightCount; i++)
 	{
@@ -146,11 +163,17 @@ vec3 ComputeSpotLights()
         vec3 reflected = reflect(light_direction, normal);
 
         float lambert = max(dot(normal, -light_direction), 0.0);
-        float phong = pow(max(dot(reflected, view), 0.0), material.shininess);
 
-        vec4 albedo = lambert * texture(material.albedo, fs_in.tex_coord) * vec4(lights[i].diffuse, 1);
-        vec4 specular = phong * texture(material.specular, fs_in.tex_coord)  * vec4(lights[i].specular, 1);
-        vec4 ambient = texture(material.albedo, fs_in.tex_coord)  * vec4(lights[i].ambient, 1);
+        float roughness = mix(material.roughness_range.x, material.roughness_range.y, texture(material.roughness, fs_in.tex_coord).r);
+        float shininess = 2.0f/pow(clamp(roughness, 0.001f, 0.999f), 4.0f) - 2.0f;
+        if (material.shininess > 0.1)
+            shininess = material.shininess;
+        float phong = pow(max(dot(reflected, view), 0.0), shininess);
+
+        vec3 albedo = lambert * texture(material.albedo, fs_in.tex_coord).rgb * lights[i].diffuse;
+        vec3 specular = phong * texture(material.specular, fs_in.tex_coord).rgb  * lights[i].specular;
+        vec3 ambient = texture(material.albedo, fs_in.tex_coord).rgb  * lights[i].ambient * material.albedo_tint;
+        ambient *= texture(material.ambient_occlusion, fs_in.tex_coord).r;
         ret += ambient + ((albedo + specular) * attenuation);
 	}
 

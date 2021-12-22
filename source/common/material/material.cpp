@@ -73,8 +73,14 @@ namespace our {
         Material::setup();
         // Set alpathreshold uniform
         shader->set("material.alphaThreshold", alphaThreshold);
-        // Set shininess uniform
+        // set the shininess
         shader->set("material.shininess", shininess);
+        // set the tints
+        shader->set("material.albedo_tint", albedo_tint);
+        shader->set("material.specular_tint", specular_tint);
+        shader->set("material.emission_tint", emission_tint);
+        // set the roughness range
+        shader->set("material.roughness_range", roughness_range);
 
         // only albedo is neccessary
         // make texture unit 0 active and bind the texture to it
@@ -113,7 +119,7 @@ namespace our {
         if (emission)
         {
             // make texture unit 4 active and bind the texture to it
-            glActiveTexture(GL_TEXTURE3);
+            glActiveTexture(GL_TEXTURE4);
             emission->bind();
             // bind the sampler to texture unit 4
             sampler->bind(4);
@@ -123,8 +129,8 @@ namespace our {
         shader->set("material.albedo", 0);
         shader->set("material.specular", 1);
         shader->set("material.roughness", 2);
-        shader->set("material.ambient_occlusion", 2);
-        shader->set("material.emission", 2);
+        shader->set("material.ambient_occlusion", 3);
+        shader->set("material.emission", 4);
 
     }
 
@@ -133,12 +139,16 @@ namespace our {
         Material::deserialize(data);
         if(!data.is_object()) return;
         alphaThreshold = data.value("alphaThreshold", 0.0f);
-        shininess = data.value("shininess", 32);
+        shininess = data.value("shininess", 0.0f);
         albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
+        albedo_tint = data.value("albedo_tint", glm::vec3(1.0f));
         specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
+        specular_tint = data.value("specular_tint", glm::vec3(1.0f));
         roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
+        roughness_range = data.value("roughness_range", glm::vec2(1.0f));
         ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
         emission = AssetLoader<Texture2D>::get(data.value("emission", ""));
+        emission_tint = data.value("emission_tint", glm::vec3(1.0f));
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
     }
 
