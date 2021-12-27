@@ -53,21 +53,34 @@ namespace our {
         void deserialize(const nlohmann::json& data) override;
     };
 
-    // This material adds needed texture maps for the lit material, and the shininess uniform needed for it
+    // This material adds needed texture maps for the lit material that will be used when we have lighting
+    // note: we are deriving from Material not TexturedMaterial as we don't want to have the texture variable, as
+    // we will create multiple textures here with better naming
     class LitMaterial : public Material {
     public:
+        // the albedo/diffuse texture aand its color tint
         Texture2D* albedo;
         glm::vec3 albedo_tint;
+        // the specular/glossy texture and its color tint
         Texture2D* specular;
         glm::vec3 specular_tint;
+        // the roughness texture and the range of the values for it
+        // as the texture values range is from 0 to 1, we need to map it using roughnes_range
         Texture2D* roughness;
         glm::vec2 roughness_range;
+        // the ambient occlusion texture, which shows how much the object has ambient light
         Texture2D* ambient_occlusion;
+        // the emission texture, which is a constant color whether there's light or not (makes an emission effect, like in lava)
+        // and the tint of it
         Texture2D* emission;
         glm::vec3 emission_tint;
+        // the sampler that we will use with this material
         Sampler* sampler;
 
+        // the alpha threshold for the material that will be used for transparency
         float alphaThreshold;
+        // the shininess of the material, it will be used instead of the roughness texture if it is larger than 0.1f
+        // (in case we don't have a roughness texture)
         float shininess;
 
         void setup() const override;

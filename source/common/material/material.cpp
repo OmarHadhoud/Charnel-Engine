@@ -66,9 +66,11 @@ namespace our {
     }
 
     // This function should call the setup of its parent and
-    // set the "alphaThreshold" uniform to the value in the member variable alphaThreshold
-    // set the texture maps and shininess
-    // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
+    // set the different texture maps we have and
+    // set the "alphaThreshold" uniform to the value in the member variable alphaThreshold and
+    // set the shininess uniform to the value in the member variable shininess and
+    // set the material tints we have
+    // Then it should bind the textures and sampler to corresponding texture units and send the unit numbers to the uniform variables
     void LitMaterial::setup() const {
         Material::setup();
         // Set alpathreshold uniform
@@ -82,13 +84,14 @@ namespace our {
         // set the roughness range
         shader->set("material.roughness_range", roughness_range);
 
-        // only albedo is neccessary
+        // only albedo is neccessary for lit materials
         // make texture unit 0 active and bind the texture to it
         glActiveTexture(GL_TEXTURE0);
         albedo->bind();
         // bind the sampler to texture unit 0
         sampler->bind(0);
 
+        // if we have a specular map provided, bind it to texture unit 1
         if (specular)
         {
             // make texture unit 1 active and bind the texture to it
@@ -98,6 +101,7 @@ namespace our {
             sampler->bind(1);
         }
 
+        // if we have a roughness map provided, bind it to texture unit 2
         if(roughness)
         {
             // make texture unit 2 active and bind the texture to it
@@ -107,6 +111,7 @@ namespace our {
             sampler->bind(2);
         }
 
+        // if we have an ambient_occlusion map provided, bind it to texture unit 3
         if (ambient_occlusion)
         {
             // make texture unit 3 active and bind the texture to it
@@ -116,6 +121,7 @@ namespace our {
             sampler->bind(3);
         }
 
+        // if we have an emission map provided, bind it to texture unit 4
         if (emission)
         {
             // make texture unit 4 active and bind the texture to it
@@ -125,7 +131,7 @@ namespace our {
             sampler->bind(4);
         }
 
-        // send the unit number as a uniform for the shader
+        // send the unit numbers as a uniform for the shader
         shader->set("material.albedo", 0);
         shader->set("material.specular", 1);
         shader->set("material.roughness", 2);

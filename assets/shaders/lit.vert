@@ -19,7 +19,7 @@ uniform mat4 model;
 uniform mat4 model_inv_transpose;
 // transforms the view from world space to camera space and then projects it
 uniform mat4 view_proj;
-
+// the position of the camera in world space to calculate the view vector
 uniform vec3 camera_pos;
 
 void main(){

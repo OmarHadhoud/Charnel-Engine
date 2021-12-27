@@ -34,14 +34,20 @@ namespace our
     public:
         // This function should be called every frame before rendering to setup the lights in the scene
         void setupLights(World* world, ShaderProgram* shaderProgram) {
+            // use the shader program before setting the lights uniforms
             shaderProgram->use();
             int lightCount = 0;
+            // loop over all the entities in the world and check if they have a light component
             for (auto entity : world->getEntities()) {
-                // Get the light component
+                // Get the light component if exists
                 auto light = entity->getComponent<LightComponent>();
                 if (light == nullptr)
                     continue;
+                // if we get thee light component, we set the light uniforms
+
+                // light direction is always forward like the camera, but transform it to world space
                 auto light_dir = glm::vec3((entity->getLocalToWorldMatrix() * glm::vec4(0, 0, -1, 0)));
+                // set the uniforms for this light in the shader program
                 shaderProgram->set("lights[" + std::to_string(lightCount) + "].type", int(light->lightType));
                 shaderProgram->set("lights[" + std::to_string(lightCount) + "].position", entity->localTransform.position);
                 shaderProgram->set("lights[" + std::to_string(lightCount) + "].direction", light_dir);
@@ -55,6 +61,7 @@ namespace our
                 shaderProgram->set("lights[" + std::to_string(lightCount) + "].outerCutoff", light->outerCutoff);
                 lightCount++;
             }
+            // send the number of lights to the shader program as we need it for the fragment shader
             shaderProgram->set("lightCount", lightCount);
         }
 
@@ -80,7 +87,7 @@ namespace our
                     command.center = glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1));
                     command.mesh = meshRenderer->mesh;
                     command.material = meshRenderer->material;
-                    // If the material is lit, we store the lit shader
+                    // If the material is lit, we get the lit shader
                     if (dynamic_cast<const LitMaterial*>(command.material))
                         litShader = meshRenderer->material->shader;
                     // if it is transparent, we add it to the transparent commands list
@@ -93,7 +100,7 @@ namespace our
                 }
             }
 
-            // if we use lights, then setup it for once before drawing
+            // if we use lights in the scene, then setup it for once before drawing
             if(litShader)
                 setupLights(world, litShader);
 
@@ -128,6 +135,8 @@ namespace our
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //TODO: Draw all the opaque commands followed by all the transparent commands
             // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
+            // notice that we send more matrices that are needed for lighting like the normal transformation matrix
+            // and the viewproj matrix, also we need to send the camera position in world space
             for (auto command : opaqueCommands)
             {
                 command.material->setup();
