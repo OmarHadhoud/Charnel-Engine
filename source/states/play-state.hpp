@@ -7,6 +7,7 @@
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
+#include <systems/collision.hpp>
 #include <asset-loader.hpp>
 
 #include <irrKlang/include/irrklang.h>
@@ -18,6 +19,7 @@ class Playstate: public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::CollisionSystem collisionSystem;
     irrklang::ISoundEngine* soundEngine;
 
     void onInitialize() override {
@@ -35,6 +37,7 @@ class Playstate: public our::State {
         cameraController.enter(getApp());
         soundEngine = irrklang::createIrrKlangDevice();
         soundEngine->play2D("assets/sound/theme.mp3", true);
+        soundEngine->setSoundVolume(0.1f);
     }
 
     void onDraw(double deltaTime) override {
@@ -44,6 +47,11 @@ class Playstate: public our::State {
         // And finally we use the renderer system to draw the scene
         auto size = getApp()->getFrameBufferSize();
         renderer.render(&world, glm::ivec2(0, 0), size);
+        auto collisions = collisionSystem.update(&world, (float)deltaTime);
+        for(auto i: collisions)
+        {
+            
+        }
     }
 
     void onDestroy() override {
@@ -51,5 +59,6 @@ class Playstate: public our::State {
         cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
+        soundEngine->drop();
     }
 };

@@ -148,12 +148,12 @@ namespace our {
         shininess = data.value("shininess", 0.0f);
         albedo = AssetLoader<Texture2D>::get(data.value("albedo", ""));
         albedo_tint = data.value("albedo_tint", glm::vec3(1.0f));
-        specular = AssetLoader<Texture2D>::get(data.value("specular", ""));
+        specular = AssetLoader<Texture2D>::get(data.value("specular", "default_specular"));
         specular_tint = data.value("specular_tint", glm::vec3(1.0f));
-        roughness = AssetLoader<Texture2D>::get(data.value("roughness", ""));
+        roughness = AssetLoader<Texture2D>::get(data.value("roughness", "default_roughness"));
         roughness_range = data.value("roughness_range", glm::vec2(1.0f));
-        ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
-        emission = AssetLoader<Texture2D>::get(data.value("emission", ""));
+        ambient_occlusion = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", "default_a_o"));
+        emission = AssetLoader<Texture2D>::get(data.value("emission", "default_emission"));
         emission_tint = data.value("emission_tint", glm::vec3(1.0f));
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
     }

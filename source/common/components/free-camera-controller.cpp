@@ -10,5 +10,6 @@ namespace our {
         fovSensitivity = data.value("fovSensitivity", fovSensitivity);
         positionSensitivity = data.value("positionSensitivity", positionSensitivity);
         speedupFactor = data.value("speedupFactor", speedupFactor);
+        lockedAxis = data.value("lockedAxis", lockedAxis);
     }
 }

@@ -73,12 +73,17 @@ namespace our
             // First of all, we search for a camera and for all the mesh renderers
             // we also search for the lit shader if it is used in a draw command, so that we use it to setup lights later
             CameraComponent* camera = nullptr;
+            CameraComponent* cameraMinimap = nullptr;
             ShaderProgram* litShader = nullptr;
             opaqueCommands.clear();
             transparentCommands.clear();
             for(auto entity : world->getEntities()){
                 // If we hadn't found a camera yet, we look for a camera in this entity
-                if(!camera) camera = entity->getComponent<CameraComponent>();
+                CameraComponent* cameraComp = entity->getComponent<CameraComponent>();
+                if (cameraComp != nullptr && cameraComp->minimap == false)
+                    camera = cameraComp;
+                if (cameraComp != nullptr && cameraComp->minimap == true)
+                    cameraMinimap = cameraComp;
                 // If this entity has a mesh renderer component
                 if(auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer){
                     // We construct a command from it
@@ -157,6 +162,36 @@ namespace our
                 command.material->shader->set("view_proj", VP);
                 command.material->shader->set("camera_pos", glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1)));
                 command.mesh->draw();
+            }
+
+            if (cameraMinimap)
+            {
+                VP = cameraMinimap->getProjectionMatrix(viewportSize) * cameraMinimap->getViewMatrix();
+                glViewport(viewportSize.x - 400, viewportSize.y -400, 400, 400);
+                glClearDepth(1);
+                glDepthMask(GL_TRUE);
+                glClear(GL_DEPTH_BUFFER_BIT);
+                for (auto command : opaqueCommands)
+                {
+                    command.material->setup();
+                    command.material->shader->set("transform", VP * command.localToWorld);
+                    command.material->shader->set("model", command.localToWorld);
+                    command.material->shader->set("model_inv_transpose", glm::transpose(glm::inverse(command.localToWorld)));
+                    command.material->shader->set("view_proj", VP);
+                    command.material->shader->set("camera_pos", glm::vec3(cameraMinimap->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1)));
+                    command.mesh->draw();
+                }
+
+                for (auto command : transparentCommands)
+                {
+                    command.material->setup();
+                    command.material->shader->set("transform", VP * command.localToWorld);
+                    command.material->shader->set("model", command.localToWorld);
+                    command.material->shader->set("model_inv_transpose", glm::transpose(glm::inverse(command.localToWorld)));
+                    command.material->shader->set("view_proj", VP);
+                    command.material->shader->set("camera_pos", glm::vec3(cameraMinimap->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1)));
+                    command.mesh->draw();
+                }
             }
         };
 
