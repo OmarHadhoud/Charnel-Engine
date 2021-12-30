@@ -117,4 +117,6 @@ set(STATES_SOURCES
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
-target_link_libraries(GAME_APPLICATION glfw)
+# Get irrKlang lib file for sound support
+find_library(IRRKLANG_LIBRARY irrKlang HINTS ${PROJECT_SOURCE_DIR}/vendor/utils/irrklang/lib)
+target_link_libraries(GAME_APPLICATION glfw  ${IRRKLANG_LIBRARY})

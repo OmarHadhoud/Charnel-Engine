@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <application.hpp>
 
 #include <ecs/world.hpp>
@@ -8,6 +9,8 @@
 #include <systems/movement.hpp>
 #include <asset-loader.hpp>
 
+#include <irrKlang/include/irrklang.h>
+
 // This state shows how to use the ECS framework and deserialization.
 class Playstate: public our::State {
 
@@ -15,6 +18,7 @@ class Playstate: public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    irrklang::ISoundEngine* soundEngine;
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -29,6 +33,8 @@ class Playstate: public our::State {
         }
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
+        soundEngine = irrklang::createIrrKlangDevice();
+        soundEngine->play2D("assets/sound/theme.mp3", true);
     }
 
     void onDraw(double deltaTime) override {
