@@ -864,7 +864,11 @@
                         "type": "Collider",
                         "colliderType": "sphere",
                         "center" : [0, 0, 0],
-                        "radius" : 0.4
+                        "radius" : 0.3
+                    },
+                    {
+                        "type": "Movement",
+                        "linearVelocity": [1, 0, -1]
                     }
                 ]
             },
@@ -883,7 +887,11 @@
                         "type": "Collider",
                         "colliderType": "sphere",
                         "center" : [0, 0, 0],
-                        "radius" : 0.4
+                        "radius" : 0.3
+                    },
+                    {
+                        "type": "Movement",
+                        "linearVelocity": [1, 0, -1]
                     }
                 ]
             },
@@ -902,7 +910,11 @@
                         "type": "Collider",
                         "colliderType": "sphere",
                         "center" : [0, 0, 0],
-                        "radius" : 0.4
+                        "radius" : 0.3
+                    },
+                    {
+                        "type": "Movement",
+                        "linearVelocity": [-1, 0, -1]
                     }
                 ]
             },
@@ -921,11 +933,11 @@
                         "type": "Collider",
                         "colliderType": "sphere",
                         "center" : [0, 0, 0],
-                        "radius" : 0.4
+                        "radius" : 0.3
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [1, 0, 0]
+                        "linearVelocity": [1, 0, -1]
                     }
                 ]
             },

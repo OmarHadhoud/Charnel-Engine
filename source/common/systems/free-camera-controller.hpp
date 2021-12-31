@@ -57,10 +57,6 @@ namespace our
             glm::vec3& position = entity->localTransform.position;
             glm::vec3& rotation = entity->localTransform.rotation;
 
-            // save the last position and rotation in case we need to restore before movement
-            controller->lastPosition = position;
-            controller->lastRotation = rotation;
-
             // If the left mouse button is pressed, we get the change in the mouse location
             // and use it to update the camera rotation
             if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1)){

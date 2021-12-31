@@ -21,6 +21,8 @@ namespace our
         void update(World* world, float deltaTime) {
             // For each entity in the world
             for(auto entity : world->getEntities()){
+                // store previous positions even if no movement component
+                entity->prevLocalTransform = entity->localTransform;
                 // Get the movement component if it exists
                 MovementComponent* movement = entity->getComponent<MovementComponent>();
                 // If the movement component exists

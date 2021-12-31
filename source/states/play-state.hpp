@@ -33,6 +33,11 @@ class Playstate: public our::State {
     double lastHit;
     // rest time for player before being hit by ghosts again
     double restTime;
+    // hack:
+    // the ghost entities
+    std::vector<our::Entity *> ghosts;
+    double lastChange[4];
+    double changeTime[4];
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -77,8 +82,13 @@ class Playstate: public our::State {
             } else if (entity->name == "heart3")
             {
                 hearts[2] = entity;
-            }
+            } else if(entity->name.size() > 5 && entity->name.substr(0,5) == "ghost")
+                ghosts.push_back(entity);
             restTime = 3;
+            changeTime[0] = rand() % 10  + 1;
+            changeTime[1] = rand() % 10  + 1;
+            changeTime[2] = rand() % 10  + 1;
+            changeTime[3] = rand() % 10  + 1;
         }
     }
 
@@ -108,29 +118,27 @@ class Playstate: public our::State {
         renderer.render(&world, glm::ivec2(0, 0), size);
 
         auto collisions = collisionSystem.update(&world, (float)deltaTime);
-        auto controller = player->parent->getComponent<our::FreeCameraControllerComponent>();
         for (auto collision: collisions)
         {
             auto entity1 = collision.first->getOwner();
             auto entity2 = collision.second->getOwner();
+            if (entity1 == nullptr || entity2 == nullptr)
+                continue;
             if (entity1 == player)
             {
                 if (entity2->name.size() >= 4 && entity2->name.substr(0,4) == "maze")
                 {
-                    player->parent->localTransform.position = controller->lastPosition;
-                    player->parent->localTransform.rotation = controller->lastRotation;
+                    player->parent->localTransform = player->parent->prevLocalTransform;
                 }
                 else if (entity2->name.size() >= 4 && entity2->name.substr(0,4) == "coin")
                 {
                     score++;
                     world.markForRemoval(entity2);
-                    world.deleteMarkedEntities();
                     soundEngine->play2D("assets/sound/coin.mp3", false);
                 }
                 else if (entity2->name.size() >= 5 && entity2->name.substr(0,5) == "ghost")
                 {
-                    player->parent->localTransform.position = controller->lastPosition;
-                    player->parent->localTransform.rotation = controller->lastRotation;
+                    player->parent->localTransform = player->parent->prevLocalTransform;
                     if (restTime > (glfwGetTime() - lastHit))
                         continue;
                     lastHit = glfwGetTime();
@@ -138,7 +146,20 @@ class Playstate: public our::State {
                     soundEngine->play2D("assets/sound/hit.wav", false);
                 }
             }
+            else if (entity1->name.size() >= 5 && entity1->name.substr(0,5) == "ghost")
+            {
+                if (entity2->name.size() >= 4 && entity2->name.substr(0,4) == "coin")
+                    continue;
+                entity1->localTransform = entity1->prevLocalTransform;
+            }
         }
+        world.deleteMarkedEntities();
+        // for (int i = 0; i < 4; i++)
+        // {
+        //     if (changeTime[i] > (glfwGetTime() - lastChange[i]))
+        //         continue;
+        //     ghosts[i]->getComponent<our::MovementComponent>()->linearVelocity = glm::vec3(rand() * 2, 0, rand() * 2);
+        // }
 
         if (health <= 0)
             app->changeState("menu");

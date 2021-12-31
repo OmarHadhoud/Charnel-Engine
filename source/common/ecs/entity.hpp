@@ -23,6 +23,7 @@ namespace our {
         Entity* parent;   // The parent of the entity. The transform of the entity is relative to its parent.
                           // If parent is null, the entity is a root entity (has no parent).
         Transform localTransform; // The transform of this entity relative to its parent.
+        Transform prevLocalTransform; // The transofrm of this entity in the previous frame.
 
         World* getWorld() const { return world; } // Returns the world to which this entity belongs
 
