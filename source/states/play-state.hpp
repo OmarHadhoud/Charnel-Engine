@@ -115,6 +115,12 @@ class Playstate: public our::State {
                     player->parent->localTransform.position = controller->lastPosition;
                     player->parent->localTransform.rotation = controller->lastRotation;
                 }
+                else if (entity2->name.size() >= 4 && entity2->name.substr(0,4) == "coin")
+                {
+                    score++;
+                    world.markForRemoval(entity2);
+                    world.deleteMarkedEntities();
+                }
             }
         }
 

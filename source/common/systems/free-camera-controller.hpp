@@ -39,7 +39,7 @@ namespace our
                 if(camera && controller) break;
             }
             // If there is no entity with both a CameraComponent and a FreeCameraControllerComponent, we can do nothing so we return
-            if(!(camera && controller)) return;
+            if(!(camera && controller) || !controller->enabled || !camera->enabled) return;
             // Get the entity that we found via getOwner of camera (we could use controller->getOwner())
             Entity* entity = camera->getOwner();
 

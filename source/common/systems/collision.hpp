@@ -69,13 +69,13 @@ namespace our
                 // Get the box collider component if it exists
                 ColliderComponent* collider1 = entity->getComponent<ColliderComponent>();
                 // If the box collider component doesn't exist, continue
-                if (!collider1)
+                if (!collider1 || !collider1->enabled)
                     continue;
                 for(auto entity2 : world->getEntities())
                 {
                     // Get the box collider component if it exists
                     ColliderComponent* collider2 = entity2->getComponent<ColliderComponent>();
-                    if (entity == entity2 || collider2 == nullptr)
+                    if (entity == entity2 || collider2 == nullptr || !collider2->enabled)
                         continue;
                     if (collider1->colliderType == ColliderType::BOX && collider2->colliderType == ColliderType::BOX)
                     {
