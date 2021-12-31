@@ -31,6 +31,7 @@ namespace our
         // We define them here (instead of being local to the "render" function) as an optimization to prevent reallocating them every frame
         std::vector<RenderCommand> opaqueCommands;
         std::vector<RenderCommand> transparentCommands;
+        std::vector<RenderCommand> uiCommands;
     public:
         // This function should be called every frame before rendering to setup the lights in the scene
         void setupLights(World* world, ShaderProgram* shaderProgram) {
@@ -77,6 +78,7 @@ namespace our
             ShaderProgram* litShader = nullptr;
             opaqueCommands.clear();
             transparentCommands.clear();
+            uiCommands.clear();
             for(auto entity : world->getEntities()){
                 // If we hadn't found a camera yet, we look for a camera in this entity
                 CameraComponent* cameraComp = entity->getComponent<CameraComponent>();
@@ -86,6 +88,8 @@ namespace our
                     cameraMinimap = cameraComp;
                 // If this entity has a mesh renderer component
                 if(auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer){
+                    if (!meshRenderer->enabled)
+                        continue;
                     // We construct a command from it
                     RenderCommand command;
                     command.localToWorld = meshRenderer->getOwner()->getLocalToWorldMatrix();
@@ -95,8 +99,11 @@ namespace our
                     // If the material is lit, we get the lit shader
                     if (command.material->lit)
                         litShader = meshRenderer->material->shader;
+                    // If the material is ui, we add it to ui commands
+                    if (command.material->ui)
+                        uiCommands.push_back(command);
                     // if it is transparent, we add it to the transparent commands list
-                    if(command.material->transparent){
+                    else if(command.material->transparent){
                         transparentCommands.push_back(command);
                     } else {
                     // Otherwise, we add it to the opaque command list
@@ -154,6 +161,17 @@ namespace our
             }
 
             for (auto command : transparentCommands)
+            {
+                command.material->setup();
+                command.material->shader->set("transform", VP * command.localToWorld);
+                command.material->shader->set("model", command.localToWorld);
+                command.material->shader->set("model_inv_transpose", glm::transpose(glm::inverse(command.localToWorld)));
+                command.material->shader->set("view_proj", VP);
+                command.material->shader->set("camera_pos", glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1)));
+                command.mesh->draw();
+            }
+
+            for (auto command : uiCommands)
             {
                 command.material->setup();
                 command.material->shader->set("transform", VP * command.localToWorld);

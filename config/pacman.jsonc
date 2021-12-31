@@ -378,7 +378,8 @@
                     "texture": "heart",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "coin_logo":{
                     "type": "textured",
@@ -395,7 +396,8 @@
                     "texture": "coin",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "0":{
                     "type": "textured",
@@ -412,7 +414,8 @@
                     "texture": "0",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "1":{
                     "type": "textured",
@@ -429,7 +432,8 @@
                     "texture": "1",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "2":{
                     "type": "textured",
@@ -446,7 +450,8 @@
                     "texture": "2",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "3":{
                     "type": "textured",
@@ -463,7 +468,8 @@
                     "texture": "3",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "4":{
                     "type": "textured",
@@ -480,7 +486,8 @@
                     "texture": "4",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "5":{
                     "type": "textured",
@@ -497,7 +504,8 @@
                     "texture": "5",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "6":{
                     "type": "textured",
@@ -514,7 +522,8 @@
                     "texture": "6",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "7":{
                     "type": "textured",
@@ -531,7 +540,8 @@
                     "texture": "7",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "8":{
                     "type": "textured",
@@ -548,7 +558,8 @@
                     "texture": "8",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 },
                 "9":{
                     "type": "textured",
@@ -565,7 +576,8 @@
                     "texture": "9",
                     "transparent": true,
                     "alphaThreshold": 0.7,
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ui": true
                 }
             }
         },

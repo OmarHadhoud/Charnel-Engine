@@ -14,9 +14,7 @@
 namespace our
 {
 
-    // The movement system is responsible for moving every entity which contains a MovementComponent.
-    // This system is added as a simple example for how use the ECS framework to implement logic. 
-    // For more information, see "common/components/movement.hpp"
+    // The collision system is responsible for checking for collisions between entities.
     class CollisionSystem {
     private:
         bool BoxCollideBox(ColliderComponent *collider1, ColliderComponent *collider2){
@@ -46,7 +44,7 @@ namespace our
                 if( center[i] < min1[i] )
                     dmin += (center[i] - min1[i]) * (center[i] - min1[i]);
                 else if( center[i] > max1[i] )
-                     dmin += (center[i] - max1[i]) * (center[i] - max1[i]);
+                        dmin += (center[i] - max1[i]) * (center[i] - max1[i]);
                 }
             return(dmin <= (collider2->radius * collider2->radius));
         };

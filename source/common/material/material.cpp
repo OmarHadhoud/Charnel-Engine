@@ -21,6 +21,8 @@ namespace our {
         }
         shader = AssetLoader<ShaderProgram>::get(data["shader"].get<std::string>());
         transparent = data.value("transparent", false);
+        lit = data.value("lit", false);
+        ui = data.value("ui", false);
     }
 
     // This function should call the setup of its parent and
