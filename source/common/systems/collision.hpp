@@ -52,7 +52,6 @@ namespace our
         };
 
         bool SphereCollideSphere(ColliderComponent *collider1, ColliderComponent *collider2){
-            return false;
             auto entity = collider1->getOwner();
             auto entity2 = collider2->getOwner();
             auto center1 = entity->getLocalToWorldMatrix() * glm::vec4(collider1->center, 1.0f);
