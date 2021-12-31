@@ -103,6 +103,20 @@ class Playstate: public our::State {
         renderer.render(&world, glm::ivec2(0, 0), size);
 
         auto collisions = collisionSystem.update(&world, (float)deltaTime);
+        auto controller = player->parent->getComponent<our::FreeCameraControllerComponent>();
+        for (auto collision: collisions)
+        {
+            auto entity1 = collision.first->getOwner();
+            auto entity2 = collision.second->getOwner();
+            if (entity1 == player)
+            {
+                if (entity2->name.size() >= 4 && entity2->name.substr(0,4) == "maze")
+                {
+                    player->parent->localTransform.position = controller->lastPosition;
+                    player->parent->localTransform.rotation = controller->lastRotation;
+                }
+            }
+        }
 
         // for testing purpose, increment the score when holding up key
         if(app->getKeyboard().isPressed(GLFW_KEY_UP))
