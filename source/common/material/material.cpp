@@ -156,6 +156,7 @@ namespace our {
         emission = AssetLoader<Texture2D>::get(data.value("emission", "default_emission"));
         emission_tint = data.value("emission_tint", glm::vec3(1.0f));
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
+        lit = true;
     }
 
 }

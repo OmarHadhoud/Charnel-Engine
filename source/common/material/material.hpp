@@ -21,7 +21,8 @@ namespace our {
         PipelineState pipelineState;
         ShaderProgram* shader;
         bool transparent;
-        
+        bool lit;
+
         // This function does 2 things: setup the pipeline state and set the shader program to be used
         virtual void setup() const;
         // This function read a material from a json object

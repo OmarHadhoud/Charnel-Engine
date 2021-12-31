@@ -8,6 +8,7 @@
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <systems/collision.hpp>
+#include <components/player.hpp>
 #include <asset-loader.hpp>
 
 #include <irrKlang/include/irrklang.h>
@@ -24,11 +25,12 @@ class Playstate: public our::State {
     // the two entities representing the 2 digit score in the ui
     our::Entity *score1;
     our::Entity *score2;
-    // the score of the game
-    int score = 0;
+    // the hearts representing the health of the player
+    std::vector<our::Entity *> hearts;
+    // the player entity
+    our::Entity *player;
 
     void onInitialize() override {
-        std::cout << "hey there\n";
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["game"];
         // If we have assets in the scene config, we deserialize them
@@ -47,6 +49,8 @@ class Playstate: public our::State {
 
         score1 = nullptr;
         score2 = nullptr;
+        player = nullptr;
+        hearts = std::vector<our::Entity *>(3, nullptr);
         // get score digit entities
         for (auto entity: world.getEntities())
         {
@@ -57,33 +61,66 @@ class Playstate: public our::State {
             else if(entity->name == "score2")
             {
                 score2 = entity;
+            } else if (entity->name == "player")
+            {
+                player = entity;
+            } else if (entity->name == "heart1")
+            {
+                hearts[0] = entity;
+            } else if (entity->name == "heart2")
+            {
+                hearts[1] = entity;
+            } else if (entity->name == "heart3")
+            {
+                hearts[2] = entity;
             }
-            if (score1 != nullptr && score2 != nullptr)
-                break;
         }
     }
 
     void onDraw(double deltaTime) override {
+        auto app = getApp();
+
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
+
+        // get score and health for the player
+        auto &score = player->getComponent<our::PlayerComponent>()->score;
+        auto &health = player->getComponent<our::PlayerComponent>()->health;
+
+        // drawing of score
         score1->getComponent<our::MeshRendererComponent>()->material = our::AssetLoader<our::Material>::get(std::to_string(score/10));
         score2->getComponent<our::MeshRendererComponent>()->material = our::AssetLoader<our::Material>::get(std::to_string(score%10));
+
+        // drawing of hearts
+        for (int i = 0; i < 3; i++)
+        {
+            hearts[i]->getComponent<our::MeshRendererComponent>()->enabled = i < health;
+        }
+
         // And finally we use the renderer system to draw the scene
         auto size = getApp()->getFrameBufferSize();
         renderer.render(&world, glm::ivec2(0, 0), size);
+
         auto collisions = collisionSystem.update(&world, (float)deltaTime);
+
         // for testing purpose, increment the score when holding up key
-        auto app = getApp();
         if(app->getKeyboard().isPressed(GLFW_KEY_UP))
         {
             score++;
         }
+        if(app->getKeyboard().isPressed(GLFW_KEY_DOWN))
+        {
+            health--;
+        }
+        if (health <= 0)
+            app->changeState("menu");
     }
 
     void onDestroy() override {
         // On exit, we call exit for the camera controller system to make sure that the mouse is unlocked
         cameraController.exit();
+        world.clear();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
         soundEngine->drop();

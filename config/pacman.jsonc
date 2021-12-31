@@ -1,5 +1,5 @@
 {
-    "start-scene": "play",
+    "start-scene": "menu",
     "window":
     {
         "title":"Pacman Game",
@@ -603,6 +603,11 @@
                                 "colliderType": "sphere",
                                 "center" : [0, -0.3, 0],
                                 "radius" : 0.4
+                            },
+                            {
+                                "type": "Player",
+                                "score": 0,
+                                "health": 3
                             }
                         ]
                     },

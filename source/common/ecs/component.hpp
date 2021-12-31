@@ -15,6 +15,7 @@ namespace our {
         Entity* owner; // A pointer to the entity that owns this component
         friend Entity; // The entity is a friend since it is the only one allowed to set itself as an owner of a certain component.
     public:
+        bool enabled = true; // the component is enabled or not
         // This static method returns a unique string that identifies each type of components
         // This ID will be used as the key to store a component into the entity's component map 
         // When you create a new type of components, override this function to return a new unique ID

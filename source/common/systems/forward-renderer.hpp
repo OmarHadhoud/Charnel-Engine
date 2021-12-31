@@ -93,7 +93,7 @@ namespace our
                     command.mesh = meshRenderer->mesh;
                     command.material = meshRenderer->material;
                     // If the material is lit, we get the lit shader
-                    if (dynamic_cast<const LitMaterial*>(command.material))
+                    if (command.material->lit)
                         litShader = meshRenderer->material->shader;
                     // if it is transparent, we add it to the transparent commands list
                     if(command.material->transparent){

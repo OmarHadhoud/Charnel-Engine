@@ -75,6 +75,7 @@ class Menustate: public our::State {
 
     void onDestroy() override {
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
+        world.clear();
         our::clearAllAssets();
         soundEngine->drop();
     }
