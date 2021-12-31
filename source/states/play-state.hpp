@@ -29,6 +29,10 @@ class Playstate: public our::State {
     std::vector<our::Entity *> hearts;
     // the player entity
     our::Entity *player;
+    // last time player got hit
+    double lastHit;
+    // rest time for player before being hit by ghosts again
+    double restTime;
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -74,6 +78,7 @@ class Playstate: public our::State {
             {
                 hearts[2] = entity;
             }
+            restTime = 3;
         }
     }
 
@@ -121,18 +126,18 @@ class Playstate: public our::State {
                     world.markForRemoval(entity2);
                     world.deleteMarkedEntities();
                 }
+                else if (entity2->name.size() >= 5 && entity2->name.substr(0,5) == "ghost")
+                {
+                    player->parent->localTransform.position = controller->lastPosition;
+                    player->parent->localTransform.rotation = controller->lastRotation;
+                    if (restTime > (glfwGetTime() - lastHit))
+                        continue;
+                    lastHit = glfwGetTime();
+                    health--;
+                }
             }
         }
 
-        // for testing purpose, increment the score when holding up key
-        if(app->getKeyboard().isPressed(GLFW_KEY_UP))
-        {
-            score++;
-        }
-        if(app->getKeyboard().isPressed(GLFW_KEY_DOWN))
-        {
-            health--;
-        }
         if (health <= 0)
             app->changeState("menu");
     }

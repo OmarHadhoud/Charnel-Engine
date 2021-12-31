@@ -51,12 +51,12 @@ class Menustate: public our::State {
 
     void onDraw(double deltaTime) override {
         auto app = getApp();
-        if(app->getKeyboard().isPressed(GLFW_KEY_UP) && !select_play)
+        if(app->getKeyboard().isPressed(GLFW_KEY_W) && !select_play)
         {
             select_play = true;
             pacman_select->localTransform.position.y = 1.0f;
         }
-        if(app->getKeyboard().isPressed(GLFW_KEY_DOWN) && select_play)
+        if(app->getKeyboard().isPressed(GLFW_KEY_S) && select_play)
         {
             select_play = false;
             pacman_select->localTransform.position.y = -3.0f;

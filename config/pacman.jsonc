@@ -850,6 +850,7 @@
                 ]
             },
             {
+                "name": "ghost1",
                 "rotation": [90, 0, 0],
                 "position": [-5.5, 0, 7],
                 "scale": [0.005, 0.005, 0.005],
@@ -868,6 +869,7 @@
                 ]
             },
             {
+                "name": "ghost2",
                 "rotation": [90, 0, 0],
                 "position": [1, 0, 7],
                 "scale": [0.005, 0.005, 0.005],
@@ -886,6 +888,7 @@
                 ]
             },
             {
+                "name": "ghost3",
                 "rotation": [90, 0, 0],
                 "position": [-2.5, 0, 7],
                 "scale": [0.005, 0.005, 0.005],
@@ -904,6 +907,7 @@
                 ]
             },
             {
+                "name": "ghost4",
                 "rotation": [90, 0, 0],
                 "position": [-8, 0, 7],
                 "scale": [0.005, 0.005, 0.005],
@@ -918,6 +922,10 @@
                         "colliderType": "sphere",
                         "center" : [0, 0, 0],
                         "radius" : 0.4
+                    },
+                    {
+                        "type": "Movement",
+                        "linearVelocity": [1, 0, 0]
                     }
                 ]
             },
