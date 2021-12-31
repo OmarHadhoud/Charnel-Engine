@@ -125,6 +125,7 @@ class Playstate: public our::State {
                     score++;
                     world.markForRemoval(entity2);
                     world.deleteMarkedEntities();
+                    soundEngine->play2D("assets/sound/coin.mp3", false);
                 }
                 else if (entity2->name.size() >= 5 && entity2->name.substr(0,5) == "ghost")
                 {
@@ -134,6 +135,7 @@ class Playstate: public our::State {
                         continue;
                     lastHit = glfwGetTime();
                     health--;
+                    soundEngine->play2D("assets/sound/hit.wav", false);
                 }
             }
         }
