@@ -13,19 +13,17 @@
 #include <irrKlang/include/irrklang.h>
 
 // This state shows how to use the ECS framework and deserialization.
-class Playstate: public our::State {
+class Menustate: public our::State {
 
     our::World world;
     our::ForwardRenderer renderer;
-    our::FreeCameraControllerSystem cameraController;
-    our::MovementSystem movementSystem;
-    our::CollisionSystem collisionSystem;
     irrklang::ISoundEngine* soundEngine;
+    our::Entity* pacman_select;
+    bool select_play = true;
 
     void onInitialize() override {
-        std::cout << "hey there\n";
         // First of all, we get the scene configuration from the app config
-        auto& config = getApp()->getConfig()["game"];
+        auto& config = getApp()->getConfig()["menu"];
         // If we have assets in the scene config, we deserialize them
         if(config.contains("assets")){
             our::deserializeAllAssets(config["assets"]);
@@ -34,30 +32,48 @@ class Playstate: public our::State {
         if(config.contains("world")){
             world.deserialize(config["world"]);
         }
-        // We initialize the camera controller system since it needs a pointer to the app
-        cameraController.enter(getApp());
+
+        // initialize the sound engine
         soundEngine = irrklang::createIrrKlangDevice();
         soundEngine->play2D("assets/sound/theme.mp3", true);
         soundEngine->setSoundVolume(0.1f);
-    }
 
-    void onDraw(double deltaTime) override {
-        // Here, we just run a bunch of systems to control the world logic
-        movementSystem.update(&world, (float)deltaTime);
-        cameraController.update(&world, (float)deltaTime);
-        // And finally we use the renderer system to draw the scene
-        auto size = getApp()->getFrameBufferSize();
-        renderer.render(&world, glm::ivec2(0, 0), size);
-        auto collisions = collisionSystem.update(&world, (float)deltaTime);
-        for(auto i: collisions)
+        // get the pacman select entity
+        for (auto entity: world.getEntities())
         {
-            
+            if (entity->name == "pacman_select")
+            {
+                pacman_select = entity;
+                break;
+            }
         }
     }
 
+    void onDraw(double deltaTime) override {
+        auto app = getApp();
+        if(app->getKeyboard().isPressed(GLFW_KEY_UP) && !select_play)
+        {
+            select_play = true;
+            pacman_select->localTransform.position.y = 1.0f;
+        }
+        if(app->getKeyboard().isPressed(GLFW_KEY_DOWN) && select_play)
+        {
+            select_play = false;
+            pacman_select->localTransform.position.y = -3.0f;
+        }
+        if(app->getKeyboard().isPressed(GLFW_KEY_SPACE))
+        {
+            if (select_play)
+                app->changeState("play");
+            else
+                glfwSetWindowShouldClose(app->getWindow(), GLFW_TRUE);
+        }
+        // we use the renderer system to draw the scene
+        auto size = getApp()->getFrameBufferSize();
+        renderer.render(&world, glm::ivec2(0, 0), size);
+    }
+
     void onDestroy() override {
-        // On exit, we call exit for the camera controller system to make sure that the mouse is unlocked
-        cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
         soundEngine->drop();
