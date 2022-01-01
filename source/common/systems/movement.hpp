@@ -161,6 +161,7 @@ namespace our
                     }
 
                     entity->localTransform.position += deltaTime * glm::length(movement->linearVelocity) * bestDirection;
+                    entity->localTransform.rotation.y = glm::pi<float>() * int(directionEnum) / 2;
                     movement->momentum -= deltaTime * glm::length(movement->linearVelocity);
                     movement->chaseDuration -= deltaTime * glm::length(movement->linearVelocity);
                     movement->direction = directionEnum;

@@ -11,11 +11,11 @@ namespace our {
     // For more information, see "common/systems/movement.hpp"
     // For a more complex example of how to use the ECS framework, see "free-camera-controller.hpp"
     enum class Direction {
+        DOWN = 0,
+        RIGHT = 1,
+        UP = 2,
+        LEFT = 3,
         NONE,
-        UP,
-        RIGHT,
-        DOWN,
-        LEFT,
     };
 
     class MovementComponent : public Component {
