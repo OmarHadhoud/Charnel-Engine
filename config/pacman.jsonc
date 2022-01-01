@@ -583,7 +583,7 @@
         },
         "world":[
             {
-                "position": [5, 1.7, 8],
+                "position": [3, 1.7, 3],
                 "rotation": [0, 0, 0],
                 "components": [
                     {
@@ -852,7 +852,7 @@
             {
                 "name": "ghost1",
                 "rotation": [90, 0, 0],
-                "position": [-5.5, 0, 7],
+                "position": [7.5, 0, -7.5],
                 "scale": [0.005, 0.005, 0.005],
                 "components": [
                     {
@@ -868,7 +868,7 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [1, 0, -1],
+                        "linearVelocity": [2.5, 0, 0],
                         "ghostId": 1
                     }
                 ]
@@ -876,7 +876,7 @@
             {
                 "name": "ghost2",
                 "rotation": [90, 0, 0],
-                "position": [1, 0, 7],
+                "position": [-7.5, 0, -7.5],
                 "scale": [0.005, 0.005, 0.005],
                 "components": [
                     {
@@ -892,15 +892,15 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [1, 0, -1],
-                        "ghostId": 1
+                        "linearVelocity": [2.5, 0, 0],
+                        "ghostId": 2
                     }
                 ]
             },
             {
                 "name": "ghost3",
                 "rotation": [90, 0, 0],
-                "position": [-2.5, 0, 7],
+                "position": [7.5, 0, 7.5],
                 "scale": [0.005, 0.005, 0.005],
                 "components": [
                     {
@@ -916,15 +916,15 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [-1, 0, -1],
-                        "ghostId": 1
+                        "linearVelocity": [2.5, 0, 0],
+                        "ghostId": 3
                     }
                 ]
             },
             {
                 "name": "ghost4",
                 "rotation": [90, 0, 0],
-                "position": [-8, 0, 7],
+                "position": [-7.5, 0, 7.5],
                 "scale": [0.005, 0.005, 0.005],
                 "components": [
                     {
@@ -940,8 +940,8 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [1, 0, -1],
-                        "ghostId": 1
+                        "linearVelocity": [2.5, 0, 0],
+                        "ghostId": 4
                     }
                 ]
             },
@@ -1028,10 +1028,67 @@
                 ]
             },
             {
-                "name": "maze3",
+                "name": "maze-left-wall",
                 "rotation": [0, 0, 0],
-                "position": [-5, 0, 0],
-                "scale": [0.1, 1, 1],
+                "position": [-10, 0, 0],
+                "scale": [0.2, 1, 10],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "cube",
+                        "material": "fence"
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "box",
+                        "min" : [-1, -1, -1],
+                        "max" : [1, 1, 1]
+                    }
+                ]
+            },
+            {
+                "name": "maze-right-wall",
+                "rotation": [0, 0, 0],
+                "position": [10, 0, 0],
+                "scale": [0.2, 1, 10],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "cube",
+                        "material": "fence"
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "box",
+                        "min" : [-1, -1, -1],
+                        "max" : [1, 1, 1]
+                    }
+                ]
+            },
+            {
+                "name": "maze-upper-wall",
+                "rotation": [0, 0, 0],
+                "position": [0, 0, -10],
+                "scale": [10, 1, 0.2],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "cube",
+                        "material": "fence"
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "box",
+                        "min" : [-1, -1, -1],
+                        "max" : [1, 1, 1]
+                    }
+                ]
+            },
+            {
+                "name": "maze-lower-wall",
+                "rotation": [0, 0, 0],
+                "position": [0, 0, 10],
+                "scale": [10, 1, 0.2],
                 "components": [
                     {
                         "type": "Mesh Renderer",

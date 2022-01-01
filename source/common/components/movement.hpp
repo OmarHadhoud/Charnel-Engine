@@ -25,9 +25,18 @@ namespace our {
 
         // Ghost Ids are to represent which enemy this is. a default value of 0 means the movement doesn't change
         int ghostId = 0;
-        Direction direction;
+        Direction direction = Direction::RIGHT;
+        glm::vec3 movementDirection = {1,0,0};
+        const float baseMomentum = 1;
+        float momentum = 0;
         Direction stuckDirection = Direction::NONE;
         bool isCollided = false;
+
+        // chase/scatter modes
+        // in chase mode ghosts target the player, and in scatter mode each one targets their corner
+        bool isChase = true;
+        const float baseChaseDuration = 40;
+        float chaseDuration = baseChaseDuration;
 
         // The ID of this component type is "Movement"
         static std::string getID() { return "Movement"; }

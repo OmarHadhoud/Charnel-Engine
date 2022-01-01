@@ -15,7 +15,7 @@ namespace our {
         // A vertex array object, A vertex buffer and an element buffer
         unsigned int VBO, EBO;
         unsigned int VAO;
-        // We need to remember the number of elements that will be draw by glDrawElements 
+        // We need to remember the number of elements that will be draw by glDrawElements
         GLsizei elementCount;
     public:
 
@@ -25,7 +25,7 @@ namespace our {
         // The mesh class does not keep a these data on the RAM. Instead, it should create
         // a vertex buffer to store the vertex data on the VRAM,
         // an element buffer to store the element data on the VRAM,
-        // a vertex array object to define how to read the vertex & element buffer during rendering 
+        // a vertex array object to define how to read the vertex & element buffer during rendering
         Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& elements)
         {
             //TODO: Write this function
@@ -71,11 +71,11 @@ namespace our {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
             // Update the element count to be used when drawing
-            elementCount = elements.size();
+            elementCount = GLsizei(elements.size());
         }
 
         // this function should render the mesh
-        void draw() 
+        void draw()
         {
             //TODO: Write this function
 
