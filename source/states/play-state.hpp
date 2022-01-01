@@ -151,6 +151,14 @@ class Playstate: public our::State {
                 if (entity2->name.size() >= 4 && entity2->name.substr(0,4) == "coin")
                     continue;
                 entity1->localTransform = entity1->prevLocalTransform;
+                if (auto ghostMovement = entity1->getComponent<our::MovementComponent>())
+                {
+                    // this value can be used in the movementSystem in the next frame TODO: maybe remove (not used atm)
+                    ghostMovement->isCollided = true;
+                    // last collision direction is discarded from the movement options
+                    // for now this is permanent each ghost has a discarded movement direction that changes with each collision
+                    ghostMovement->stuckDirection = ghostMovement->direction;
+                }
             }
         }
         world.deleteMarkedEntities();
