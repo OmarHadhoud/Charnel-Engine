@@ -79,7 +79,7 @@ void main(){
 vec3 ComputeLight()
 {
     vec3 color = vec3(0.0f);
-    for(int i = 0; i < lightCount; i++)
+    for(int i = 0; i < min(lightCount, MAX_LIGHTS); i++)
 	{
         if (lights[i].type == TYPE_DIRECTIONAL)
             color += ComputeDirectionalLight(lights[i]);
