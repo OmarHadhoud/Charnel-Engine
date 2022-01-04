@@ -33,11 +33,12 @@ class Playstate: public our::State {
     double lastHit;
     // rest time for player before being hit by ghosts again
     double restTime;
-    // hack:
     // the ghost entities
     std::vector<our::Entity *> ghosts;
     double lastChange[4];
     double changeTime[4];
+    // the number of coins in the level
+    int coinsNumber;
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -60,6 +61,7 @@ class Playstate: public our::State {
         score2 = nullptr;
         player = nullptr;
         hearts = std::vector<our::Entity *>(3, nullptr);
+        coinsNumber = 0;
         // get score digit entities
         for (auto entity: world.getEntities())
         {
@@ -84,6 +86,8 @@ class Playstate: public our::State {
                 hearts[2] = entity;
             } else if(entity->name.size() > 5 && entity->name.substr(0,5) == "ghost")
                 ghosts.push_back(entity);
+            else if (entity->name.size() > 4 && entity->name.substr(0,4) == "coin")
+                coinsNumber++;
             restTime = 3;
             changeTime[0] = rand() % 10  + 1;
             changeTime[1] = rand() % 10  + 1;
@@ -172,7 +176,7 @@ class Playstate: public our::State {
         //     ghosts[i]->getComponent<our::MovementComponent>()->linearVelocity = glm::vec3(rand() * 2, 0, rand() * 2);
         // }
 
-        if (health <= 0)
+        if (health <= 0 || score >= coinsNumber)
             app->changeState("menu");
     }
 

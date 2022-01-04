@@ -7,7 +7,7 @@
             "width":1920,
             "height":1080
         },
-        "fullscreen": false
+        "fullscreen": true
     },
     "game": {
         "assets":{
@@ -704,7 +704,7 @@
                 ]
             },
             {
-                "position": [0, 13, 0],
+                "position": [0, 14, 0],
                 "rotation": [-90, 0, 0],
                 "components": [
                     {
@@ -983,7 +983,7 @@
             },
             {
                 "name": "coin1",
-                "position": [4, 0.5, 1],
+                "position": [9, 0.5, 9],
                 "scale": [0.3, 0.3, 0.03],
                 "components": [
                     {
@@ -1028,6 +1028,182 @@
             {
                 "name": "coin3",
                 "position": [-4, 0.5, -1],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin4",
+                "position": [-12, 0.5, -12],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin5",
+                "position": [12, 0.5, 12],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin6",
+                "position": [12, 0.5, -12],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin7",
+                "position": [-12, 0.5, 12],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin8",
+                "position": [-8, 0.5, 1],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin9",
+                "position": [7, 0.5, -4],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin10",
+                "position": [-7, 0.5, -4],
+                "scale": [0.3, 0.3, 0.03],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "coin"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    },
+                    {
+                        "type": "Collider",
+                        "colliderType": "sphere",
+                        "center" : [0, 0, 0],
+                        "radius" : 0.3
+                    }
+                ]
+            },
+            {
+                "name": "coin11",
+                "position": [-9, 0.5, -9],
                 "scale": [0.3, 0.3, 0.03],
                 "components": [
                     {
