@@ -4,7 +4,8 @@
 #include <json/json.hpp>
 
 #include <application.hpp>
-
+#include "states/lost-state.hpp"
+#include "states/won-state.hpp"
 #include "states/menu-state.hpp"
 #include "states/play-state.hpp"
 #include "states/mesh-test-state.hpp"
@@ -41,6 +42,8 @@ int main(int argc, char** argv) {
     our::Application app(app_config);
 
     // Register all the states of the project in the application
+    app.registerState<LostState>("lost");
+    app.registerState<WonState>("won");
     app.registerState<Menustate>("menu");
     app.registerState<Playstate>("play");
     app.registerState<MeshTestState>("mesh-test");

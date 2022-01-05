@@ -1,0 +1,192 @@
+{
+    "start-scene": "menu",
+    "window":
+    {
+        "title":"Pacman",
+        "size":{
+            "width":1920,
+            "height":1080
+        },
+        "fullscreen": false
+    },
+    "scene": {
+        "assets":{
+            "shaders":{
+                "textured":{
+                    "vs":"assets/shaders/textured.vert",
+                    "fs":"assets/shaders/textured.frag"
+                }
+            },
+            "textures":{
+                "pacman_logo": "assets/textures/pacman_logo.png",
+                "play_text": "assets/textures/play_text.png",
+                "exit_text": "assets/textures/exit_text.png",
+                "press_space_text": "assets/textures/press_space.png",
+                "pacman_select": "assets/textures/pacman_select.png"
+            },
+            "meshes":{
+                "plane": "assets/models/plane.obj"
+            },
+            "samplers":{
+                "default":{},
+                "pixelated":{
+                    "MAG_FILTER": "GL_NEAREST"
+                }
+            },
+            "materials":{
+                "background":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "pacman_logo",
+                    "sampler": "default"
+                },
+                "play_text":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "play_text",
+                    "sampler": "default"
+                },
+                "exit_text":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "exit_text",
+                    "transparent": true,
+                    "sampler": "default"
+                },
+                "press_space_text":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "press_space_text",
+                    "transparent": true,
+                    "sampler": "default"
+                },
+                "pacman_select":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "pacman_select",
+                    "transparent": true,
+                    "alphaThreshold": 0.15,
+                    "sampler": "default"
+                }
+            }
+        },
+        "world":[
+            {
+                "position": [0, 0, 0],
+                "rotation": [0, 0, 0],
+                "components": [
+                    {
+                        "type": "Camera",
+                        "minimap": false
+                    }
+                ]
+            },
+            {
+                "position": [0, 0, -10],
+                "rotation": [0, 0, 0],
+                "scale": [10, 10, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "background"
+                    }
+                ]
+            },
+            {
+                "position": [0, 1.2, -9],
+                "rotation": [0, 0, 0],
+                "scale": [2, 1, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "play_text"
+                    }
+                ]
+            },
+            {
+                "position": [0, -2.8, -9],
+                "rotation": [0, 0, 0],
+                "scale": [2, 1, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "exit_text"
+                    }
+                ]
+            },
+            {
+                "position": [0, -6.5, -9],
+                "rotation": [0, 0, 0],
+                "scale": [8, 1, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "press_space_text"
+                    }
+                ]
+            },
+            {
+                "name": "pacman_select",
+                "position": [-3, 1, -9],
+                "rotation": [0, 0, 0],
+                "scale": [0.3, 0.5, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "pacman_select"
+                    }
+                ]
+            }
+        ]
+    }
+}

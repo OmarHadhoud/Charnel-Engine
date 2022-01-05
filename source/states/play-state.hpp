@@ -176,8 +176,13 @@ class Playstate: public our::State {
         //     ghosts[i]->getComponent<our::MovementComponent>()->linearVelocity = glm::vec3(rand() * 2, 0, rand() * 2);
         // }
 
-        if (health <= 0 || score >= coinsNumber)
-            app->changeState("menu");
+        /*if (health <= 0 || score >= coinsNumber)
+            app->changeState("won");*/
+        if (health <= 0)
+            app->changeState("lost");
+
+        if (score >= coinsNumber)
+            app->changeState("won");
     }
 
     void onDestroy() override {
