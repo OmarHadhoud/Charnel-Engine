@@ -142,8 +142,6 @@ class Playstate: public our::State {
                 }
                 else if (entity2->name.size() >= 5 && entity2->name.substr(0,5) == "ghost")
                 {
-                    // TODO: maybe remove this
-                    // player->parent->localTransform = player->parent->prevLocalTransform;
                     if (restTime > (glfwGetTime() - lastHit))
                         continue;
                     lastHit = glfwGetTime();
@@ -169,15 +167,7 @@ class Playstate: public our::State {
             }
         }
         world.deleteMarkedEntities();
-        // for (int i = 0; i < 4; i++)
-        // {
-        //     if (changeTime[i] > (glfwGetTime() - lastChange[i]))
-        //         continue;
-        //     ghosts[i]->getComponent<our::MovementComponent>()->linearVelocity = glm::vec3(rand() * 2, 0, rand() * 2);
-        // }
 
-        /*if (health <= 0 || score >= coinsNumber)
-            app->changeState("won");*/
         if (health <= 0)
             app->changeState("lost");
 
