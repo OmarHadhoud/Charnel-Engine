@@ -902,7 +902,7 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [ 2.5, 0, 0 ],
+                        "linearVelocity": [ 2.8, 0, 0 ],
                         "ghostId": 1
                     }
                 ]
@@ -926,7 +926,7 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [ 2.5, 0, 0 ],
+                        "linearVelocity": [ 2.8, 0, 0 ],
                         "ghostId": 2
                     }
                 ]
@@ -950,7 +950,7 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [ 2.5, 0, 0 ],
+                        "linearVelocity": [ 2.8, 0, 0 ],
                         "ghostId": 3
                     }
                 ]
@@ -974,7 +974,7 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [ 2.5, 0, 0 ],
+                        "linearVelocity": [ 2.8, 0, 0 ],
                         "ghostId": 4
                     }
                 ]

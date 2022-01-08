@@ -27,7 +27,7 @@ namespace our {
         int ghostId = 0;
         Direction direction = Direction::RIGHT;
         glm::vec3 movementDirection = {1,0,0};
-        const float baseMomentum = 1;
+        const float baseMomentum = 1.5;
         float momentum = 0;
         Direction stuckDirection = Direction::NONE;
         bool isCollided = false;
