@@ -86,13 +86,13 @@ namespace our {
         // set the roughness range
         shader->set("material.roughness_range", roughness_range);
 
-        // only albedo is neccessary for lit materials
         // make texture unit 0 active and bind the texture to it
         glActiveTexture(GL_TEXTURE0);
         albedo->bind();
         // bind the sampler to texture unit 0
         sampler->bind(0);
 
+        // add if condition to prevent runtime error, but behaviour is undefined (will use previously bounded textures)
         // if we have a specular map provided, bind it to texture unit 1
         if (specular)
         {
